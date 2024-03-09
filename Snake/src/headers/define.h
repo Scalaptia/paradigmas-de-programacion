@@ -1,2 +1,1 @@
-#define MAX_LENGTH 255
 #define SQUARE_SIZE 66

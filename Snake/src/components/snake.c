@@ -1,24 +1,39 @@
 #include "../headers/snake.h"
 
-void InitSnake(Snake *snake, Vector2 *snakePosition, Vector2 offset)
+void InitSnake(Snake *snake, Vector2 offset)
 {
     snake->speed = 15;
-    snake->length = 5;
+    snake->length = 1;
+    snake->size = (Vector2){SQUARE_SIZE, SQUARE_SIZE};
 
-    for (int i = 0; i < MAX_LENGTH; i++)
+    snake->body = malloc(sizeof(SnakeBody));
+    snake->body->position = (Vector2){offset.x / 2, offset.y / 2};
+    snake->body->direction = (Vector2){SQUARE_SIZE, 0};
+    snake->body->color = DARKGREEN;
+    snake->body->sig = NULL;
+    snake->body->ant = NULL;
+}
+
+void AddLength(Snake *snake, int length)
+{
+    snake->length += length;
+    SnakeBody *current = snake->body;
+
+    // Mover al final de la serpiente
+    while (current->sig != NULL)
     {
-        snake[i].position = (Vector2){offset.x / 2, offset.y / 2};
-        snake[i].size = (Vector2){SQUARE_SIZE, SQUARE_SIZE};
-        snake[i].direction = (Vector2){SQUARE_SIZE, 0};
-
-        if (i == 0)
-            snake[i].color = DARKGREEN;
-        else
-            snake[i].color = GREEN;
+        current = current->sig;
     }
 
-    for (int i = 0; i < MAX_LENGTH; i++)
+    // Agregar nuevo cuerpo
+    for (int i = 0; i < length; i++)
     {
-        snakePosition[i] = (Vector2){0.0f, 0.0f};
+        current->sig = malloc(sizeof(SnakeBody));
+        current->sig->position = current->position;
+        current->sig->direction = current->direction;
+        current->sig->color = GREEN;
+        current->sig->sig = NULL;
+        current->sig->ant = current;
+        current = current->sig;
     }
 }

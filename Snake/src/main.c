@@ -9,8 +9,7 @@ int framesCounter = 0;
 bool gameOver = false;
 bool allowMove = false;
 
-Snake snake[MAX_LENGTH] = {0};
-Vector2 snakePosition[MAX_LENGTH] = {0};
+Snake snake;
 const Vector2 offset = {screenWidth % SQUARE_SIZE, screenWidth % SQUARE_SIZE};
 
 // Prototipos
@@ -43,7 +42,8 @@ void InitGame()
     framesCounter = 0;
     gameOver = false;
     allowMove = false;
-    InitSnake(snake, snakePosition, offset);
+    InitSnake(&snake, offset);
+    AddLength(&snake, 106);
 }
 
 void UpdateGame()
@@ -60,50 +60,50 @@ void UpdateGame()
 
         // Cambiar dirección de la serpiente siempre y cuando no sea la dirección
         // opuesta y no haya cambiado de dirección en el mismo frame.
-        if (IsKeyPressed(KEY_W) && (snake[0].direction.y == 0) && allowMove)
+        if (IsKeyPressed(KEY_W) && (snake.body->direction.y == 0) && allowMove)
         {
-            snake[0].direction = (Vector2){0, -SQUARE_SIZE};
+            snake.body->direction = (Vector2){0, -SQUARE_SIZE};
             allowMove = false;
         }
-        if (IsKeyPressed(KEY_S) && (snake[0].direction.y == 0) && allowMove)
+        if (IsKeyPressed(KEY_S) && (snake.body->direction.y == 0) && allowMove)
         {
-            snake[0].direction = (Vector2){0, SQUARE_SIZE};
+            snake.body->direction = (Vector2){0, SQUARE_SIZE};
             allowMove = false;
         }
-        if (IsKeyPressed(KEY_A) && (snake[0].direction.x == 0) && allowMove)
+        if (IsKeyPressed(KEY_A) && (snake.body->direction.x == 0) && allowMove)
         {
-            snake[0].direction = (Vector2){-SQUARE_SIZE, 0};
+            snake.body->direction = (Vector2){-SQUARE_SIZE, 0};
             allowMove = false;
         }
-        if (IsKeyPressed(KEY_D) && (snake[0].direction.x == 0) && allowMove)
+        if (IsKeyPressed(KEY_D) && (snake.body->direction.x == 0) && allowMove)
         {
-            snake[0].direction = (Vector2){SQUARE_SIZE, 0};
+            snake.body->direction = (Vector2){SQUARE_SIZE, 0};
             allowMove = false;
-        }
-
-        // Guardar la posición de la serpiente
-        for (int i = 0; i < snake->length; i++)
-        {
-            snakePosition[i] = snake[i].position;
         }
 
         // Actualizar posición de la serpiente a la velocidad actual
-        if ((framesCounter % snake->speed) == 0)
+        if ((framesCounter % snake.speed) == 0)
         {
-            for (int i = 0; i < snake->length; i++)
+            Vector2 temp = snake.body->position; // Almacenar la posición actual
+            Vector2 last;                        // Variable temporal para almacenar la última posición
+
+            // Mover cabeza
+            snake.body->position.x += snake.body->direction.x;
+            snake.body->position.y += snake.body->direction.y;
+
+            // Mover el resto del cuerpo
+            SnakeBody *current = snake.body->sig;
+
+            while (current != NULL)
             {
-                if (i == 0)
-                {
-                    snake[0].position.x += snake[0].direction.x;
-                    snake[0].position.y += snake[0].direction.y;
-                    allowMove = true;
-                }
-                else
-                {
-                    // Mover el nodo a la posición del nodo anterior
-                    snake[i].position = snakePosition[i - 1];
-                }
+                last = current->position; // Almacenar posición actual
+                current->position = temp; // Actualizar posición actual con la posición anterior
+
+                temp = last;            // Actualizar posición anterior con la posición actual
+                current = current->sig; // Mover al siguiente cuerpo
             }
+
+            allowMove = true;
         }
 
         framesCounter++;
@@ -138,9 +138,11 @@ void DrawGame()
         }
 
         // Pintar serpiente
-        for (int i = 0; i < snake->length; i++)
+        SnakeBody *current = snake.body;
+        while (current != NULL)
         {
-            DrawRectangleV(snake[i].position, snake[i].size, snake[i].color);
+            DrawRectangleV(current->position, snake.size, current->color);
+            current = current->sig;
         }
     }
     else

@@ -1,14 +1,23 @@
 #include "raylib.h"
 #include "./define.h"
+#include <stdlib.h>
+
+typedef struct SnakeBody
+{
+    Vector2 position;
+    Vector2 direction;
+    Color color;
+    struct SnakeBody *sig;
+    struct SnakeBody *ant;
+} SnakeBody;
 
 typedef struct Snake
 {
-    Vector2 position;
-    Vector2 size;
-    Vector2 direction;
     int speed;
     int length;
-    Color color;
+    Vector2 size;
+    SnakeBody *body;
 } Snake;
 
-void InitSnake(Snake *snake, Vector2 *snakePosition, Vector2 offset);
+void InitSnake(Snake *snake, Vector2 offset);
+void AddLength(Snake *snake, int length);
