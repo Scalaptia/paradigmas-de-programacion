@@ -13,6 +13,8 @@ Clase: Paradigmas de Programación
 7. [Agregar llave a Github](#agregar-llave-a-github)
 8. [Clonar repositorio](#clonar-repositorio)
 9. [Crear branch](#crear-branch)
+10. [Restaurar cambios](#restaurar-cambios)
+11. [Fusionar branch](#fusionar-branch)
 
 ### Crear / Verificar cuenta de Github
 
