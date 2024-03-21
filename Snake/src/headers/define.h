@@ -1,1 +1,1 @@
-#define SQUARE_SIZE 66
+#define SQUARE_SIZE 50

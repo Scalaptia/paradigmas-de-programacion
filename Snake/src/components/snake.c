@@ -1,13 +1,13 @@
 #include "../headers/snake.h"
 
-void InitSnake(Snake *snake, Vector2 offset)
+void InitSnake(Snake *snake, Vector2 position)
 {
-    snake->speed = 15;
+    snake->speed = 20;
     snake->length = 1;
     snake->size = (Vector2){SQUARE_SIZE, SQUARE_SIZE};
 
     snake->body = malloc(sizeof(SnakeBody));
-    snake->body->position = (Vector2){offset.x / 2, offset.y / 2};
+    snake->body->position = (Vector2){position.x, position.y};
     snake->body->direction = (Vector2){SQUARE_SIZE, 0};
     snake->body->color = DARKGREEN;
     snake->body->sig = NULL;
@@ -34,6 +34,7 @@ void AddLength(Snake *snake, int length)
         current->sig->color = GREEN;
         current->sig->sig = NULL;
         current->sig->ant = current;
+
         current = current->sig;
     }
 }

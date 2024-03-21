@@ -10,7 +10,6 @@ bool gameOver = false;
 bool allowMove = false;
 
 Snake snake;
-const Vector2 offset = {screenWidth % SQUARE_SIZE, screenWidth % SQUARE_SIZE};
 
 // Prototipos
 void InitGame();
@@ -42,8 +41,8 @@ void InitGame()
     framesCounter = 0;
     gameOver = false;
     allowMove = false;
-    InitSnake(&snake, offset);
-    AddLength(&snake, 106);
+    InitSnake(&snake, (Vector2){0, 0});
+    AddLength(&snake, 1);
 }
 
 void UpdateGame()
@@ -65,16 +64,19 @@ void UpdateGame()
             snake.body->direction = (Vector2){0, -SQUARE_SIZE};
             allowMove = false;
         }
+
         if (IsKeyPressed(KEY_S) && (snake.body->direction.y == 0) && allowMove)
         {
             snake.body->direction = (Vector2){0, SQUARE_SIZE};
             allowMove = false;
         }
+
         if (IsKeyPressed(KEY_A) && (snake.body->direction.x == 0) && allowMove)
         {
             snake.body->direction = (Vector2){-SQUARE_SIZE, 0};
             allowMove = false;
         }
+
         if (IsKeyPressed(KEY_D) && (snake.body->direction.x == 0) && allowMove)
         {
             snake.body->direction = (Vector2){SQUARE_SIZE, 0};
@@ -127,14 +129,12 @@ void DrawGame()
         ClearBackground(BLACK);
 
         // Pintar matriz
-        for (int i = 0; i < screenWidth / SQUARE_SIZE + 1; i++)
+        for (int i = 0; i < GetScreenWidth(); i += SQUARE_SIZE)
         {
-            DrawLineV((Vector2){SQUARE_SIZE * i + offset.x / 2, offset.y / 2}, (Vector2){SQUARE_SIZE * i + offset.x / 2, screenHeight - offset.y / 2}, GRAY);
-        }
-
-        for (int i = 0; i < screenHeight / SQUARE_SIZE + 1; i++)
-        {
-            DrawLineV((Vector2){offset.x / 2, SQUARE_SIZE * i + offset.y / 2}, (Vector2){screenWidth - offset.x / 2, SQUARE_SIZE * i + offset.y / 2}, GRAY);
+            for (int j = 0; j < GetScreenHeight(); j += SQUARE_SIZE)
+            {
+                DrawRectangle(i, j, SQUARE_SIZE, SQUARE_SIZE, (i + j) % (SQUARE_SIZE * 2) == 0 ? WHITE : LIGHTGRAY);
+            }
         }
 
         // Pintar serpiente
@@ -146,7 +146,7 @@ void DrawGame()
         }
     }
     else
-        DrawText("Presiona ENTER para reiniciar", GetScreenWidth() / 2 - MeasureText("Presiona ENTER para reiniciar", 20) / 2, GetScreenHeight() / 2 - 50, 20, WHITE);
+        DrawText("Presiona ENTER para reiniciar", GetScreenWidth() / 2 - MeasureText("Presiona ENTER para reiniciar", 40) / 2, GetScreenHeight() / 2 - 50, 40, BLACK);
 
     EndDrawing();
 }

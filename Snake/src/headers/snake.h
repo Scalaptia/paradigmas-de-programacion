@@ -19,5 +19,5 @@ typedef struct Snake
     SnakeBody *body;
 } Snake;
 
-void InitSnake(Snake *snake, Vector2 offset);
+void InitSnake(Snake *snake, Vector2 position);
 void AddLength(Snake *snake, int length);
