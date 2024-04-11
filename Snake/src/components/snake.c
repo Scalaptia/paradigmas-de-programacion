@@ -2,7 +2,7 @@
 
 void InitSnake(Snake *snake, Vector2 position)
 {
-    snake->speed = 20;
+    snake->speed = 15;
     snake->length = 1;
     snake->size = (Vector2){SQUARE_SIZE, SQUARE_SIZE};
 

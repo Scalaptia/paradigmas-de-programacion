@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "./headers/snake.h"
 #include "./headers/define.h"
+#include "./headers/fruit.h"
 
 const int screenWidth = 800;
 const int screenHeight = 600;
@@ -10,6 +11,7 @@ bool gameOver = false;
 bool allowMove = false;
 
 Snake snake;
+Fruit fruit;
 
 // Prototipos
 void InitGame();
@@ -42,7 +44,7 @@ void InitGame()
     gameOver = false;
     allowMove = false;
     InitSnake(&snake, (Vector2){0, 0});
-    AddLength(&snake, 1);
+    PlaceFruit(&fruit, screenWidth, screenHeight);
 }
 
 void UpdateGame()
@@ -93,9 +95,32 @@ void UpdateGame()
             snake.body->position.x += snake.body->direction.x;
             snake.body->position.y += snake.body->direction.y;
 
-            // Mover el resto del cuerpo
-            SnakeBody *current = snake.body->sig;
+            // Verificar colisión con los bordes
+            if (snake.body->position.x >= screenWidth || snake.body->position.x < 0 || snake.body->position.y >= screenHeight || snake.body->position.y < 0)
+            {
+                gameOver = true;
+            }
 
+            // Verificar colisión con el cuerpo
+            SnakeBody *current = snake.body->sig;
+            while (current != NULL)
+            {
+                if (CheckCollisionRecs((Rectangle){snake.body->position.x, snake.body->position.y, snake.size.x, snake.size.y}, (Rectangle){current->position.x, current->position.y, snake.size.x, snake.size.y}))
+                {
+                    gameOver = true;
+                }
+                current = current->sig;
+            }
+
+            // Verificar colisión con la fruta
+            if (CheckCollisionRecs((Rectangle){snake.body->position.x, snake.body->position.y, snake.size.x, snake.size.y}, (Rectangle){fruit.position.x, fruit.position.y, snake.size.x, snake.size.y}))
+            {
+                AddLength(&snake, 1);
+                PlaceFruit(&fruit, screenWidth, screenHeight);
+            }
+
+            // Mover el resto del cuerpo
+            current = snake.body->sig;
             while (current != NULL)
             {
                 last = current->position; // Almacenar posición actual
@@ -143,6 +168,12 @@ void DrawGame()
         {
             DrawRectangleV(current->position, snake.size, current->color);
             current = current->sig;
+        }
+
+        // Pintar fruta
+        if (fruit.active)
+        {
+            DrawRectangleV(fruit.position, snake.size, RED);
         }
     }
     else
