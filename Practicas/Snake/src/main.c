@@ -2,35 +2,52 @@
 #include "./headers/snake.h"
 #include "./headers/define.h"
 #include "./headers/fruit.h"
+#include "./headers/menu.h"
 
 const int screenWidth = 800;
 const int screenHeight = 600;
 
 int framesCounter = 0;
-bool gameOver = false;
 bool allowMove = false;
 
 Snake snake;
 Fruit fruit;
+Menu menu;
 
 // Prototipos
 void InitGame();
-void UpdateGame();
+void UpdateGame(bool *menuActive);
 void DrawGame();
 
 // Main
 int main(void)
 {
+    bool menuActive = true;
+
     // Inicializar juego
-    InitWindow(screenWidth, screenHeight, "snake");
+    InitWindow(screenWidth, screenHeight, "Snake");
+    // Imagen
+    Image fondo = LoadImage("/home/haro/Documents/GitHub/paradigmas-de-programacion/Practicas/Snake/resources/fondo.png");
+    Texture2D texture = LoadTextureFromImage(fondo);
+    UnloadImage(fondo);
+
+    InitMenu(&menu, 2);
     InitGame();
     SetTargetFPS(120);
 
     // Actualizar estado y dibujar juego
     while (!WindowShouldClose())
     {
-        UpdateGame();
-        DrawGame();
+        if (menuActive)
+        {
+            DrawMenu(&menu, (char *[]){"Jugar", "Salir"}, screenWidth, screenHeight, &texture);
+            UpdateMenu(&menu, (char *[]){"Jugar", "Salir"}, screenWidth, screenHeight, &menuActive);
+        }
+        else
+        {
+            UpdateGame(&menuActive);
+            DrawGame();
+        }
     }
 
     CloseWindow();
@@ -41,21 +58,20 @@ int main(void)
 void InitGame()
 {
     framesCounter = 0;
-    gameOver = false;
     allowMove = false;
     InitSnake(&snake, (Vector2){0, 0});
     PlaceFruit(&fruit, screenWidth, screenHeight);
 }
 
-void UpdateGame()
+void UpdateGame(bool *menuActive)
 {
     // Salir del juego
     if (IsKeyPressed(KEY_X))
     {
-        gameOver = true;
+        *menuActive = true;
+        return;
     }
-
-    if (!gameOver)
+    else
     {
         // Entrada de usuario
 
@@ -98,7 +114,8 @@ void UpdateGame()
             // Verificar colisión con los bordes
             if (snake.body->position.x >= screenWidth || snake.body->position.x < 0 || snake.body->position.y >= screenHeight || snake.body->position.y < 0)
             {
-                gameOver = true;
+                *menuActive = true;
+                InitGame();
             }
 
             // Verificar colisión con el cuerpo
@@ -107,7 +124,8 @@ void UpdateGame()
             {
                 if (CheckCollisionRecs((Rectangle){snake.body->position.x, snake.body->position.y, snake.size.x, snake.size.y}, (Rectangle){current->position.x, current->position.y, snake.size.x, snake.size.y}))
                 {
-                    gameOver = true;
+                    *menuActive = true;
+                    InitGame();
                 }
                 current = current->sig;
             }
@@ -135,49 +153,36 @@ void UpdateGame()
 
         framesCounter++;
     }
-    else
-    {
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            InitGame();
-            gameOver = false;
-        }
-    }
 }
 
 void DrawGame()
 {
     BeginDrawing();
 
-    if (!gameOver)
+    ClearBackground(BLACK);
+
+    // Pintar matriz
+    for (int i = 0; i < GetScreenWidth(); i += SQUARE_SIZE)
     {
-        ClearBackground(BLACK);
-
-        // Pintar matriz
-        for (int i = 0; i < GetScreenWidth(); i += SQUARE_SIZE)
+        for (int j = 0; j < GetScreenHeight(); j += SQUARE_SIZE)
         {
-            for (int j = 0; j < GetScreenHeight(); j += SQUARE_SIZE)
-            {
-                DrawRectangle(i, j, SQUARE_SIZE, SQUARE_SIZE, (i + j) % (SQUARE_SIZE * 2) == 0 ? WHITE : LIGHTGRAY);
-            }
-        }
-
-        // Pintar serpiente
-        SnakeBody *current = snake.body;
-        while (current != NULL)
-        {
-            DrawRectangleV(current->position, snake.size, current->color);
-            current = current->sig;
-        }
-
-        // Pintar fruta
-        if (fruit.active)
-        {
-            DrawRectangleV(fruit.position, snake.size, RED);
+            DrawRectangle(i, j, SQUARE_SIZE, SQUARE_SIZE, (i + j) % (SQUARE_SIZE * 2) == 0 ? WHITE : LIGHTGRAY);
         }
     }
-    else
-        DrawText("Presiona ENTER para reiniciar", GetScreenWidth() / 2 - MeasureText("Presiona ENTER para reiniciar", 40) / 2, GetScreenHeight() / 2 - 50, 40, BLACK);
+
+    // Pintar serpiente
+    SnakeBody *current = snake.body;
+    while (current != NULL)
+    {
+        DrawRectangleV(current->position, snake.size, current->color);
+        current = current->sig;
+    }
+
+    // Pintar fruta
+    if (fruit.active)
+    {
+        DrawRectangleV(fruit.position, snake.size, RED);
+    }
 
     EndDrawing();
 }

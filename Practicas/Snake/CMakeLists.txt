@@ -24,7 +24,8 @@ endif()
 
 add_executable(Snake src/main.c
 src/components/snake.c
-src/components/fruit.c)
+src/components/fruit.c
+src/components/menu.c)
 
 target_link_libraries(Snake PUBLIC raylib)
 target_compile_definitions(Snake PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
