@@ -8,4 +8,4 @@ typedef struct Fruit
     bool active;
 } Fruit;
 
-void PlaceFruit(Fruit *fruit, int screenWidth, int screenHeight);
+void PlaceFruit(Fruit *fruit);

@@ -4,35 +4,29 @@
 #include "./headers/fruit.h"
 #include "./headers/menu.h"
 
-const int screenWidth = 800;
-const int screenHeight = 600;
-
-int framesCounter = 0;
-bool allowMove = false;
-
 Snake snake;
 Fruit fruit;
 Menu menu;
 
 // Prototipos
-void InitGame();
-void UpdateGame(bool *menuActive);
+void InitGame(int *framesCounter);
+void UpdateGame(bool *menuActive, int *framesCounter);
 void DrawGame();
 
 // Main
 int main(void)
 {
     bool menuActive = true;
+    int framesCounter = 0;
 
     // Inicializar juego
-    InitWindow(screenWidth, screenHeight, "Snake");
-    // Imagen
-    Image fondo = LoadImage("/home/haro/Documents/GitHub/paradigmas-de-programacion/Practicas/Snake/resources/fondo.png");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Snake");
+    Image fondo = LoadImage("Practicas/Snake/resources/fondo.png");
     Texture2D texture = LoadTextureFromImage(fondo);
     UnloadImage(fondo);
 
     InitMenu(&menu, 2);
-    InitGame();
+    InitGame(&framesCounter);
     SetTargetFPS(120);
 
     // Actualizar estado y dibujar juego
@@ -40,12 +34,12 @@ int main(void)
     {
         if (menuActive)
         {
-            DrawMenu(&menu, (char *[]){"Jugar", "Salir"}, screenWidth, screenHeight, &texture);
-            UpdateMenu(&menu, (char *[]){"Jugar", "Salir"}, screenWidth, screenHeight, &menuActive);
+            DrawMenu(&menu, (char *[]){"Jugar", "Salir"}, &texture);
+            UpdateMenu(&menu, (char *[]){"Jugar", "Salir"}, &menuActive);
         }
         else
         {
-            UpdateGame(&menuActive);
+            UpdateGame(&menuActive, &framesCounter);
             DrawGame();
         }
     }
@@ -55,16 +49,17 @@ int main(void)
     return 0;
 }
 
-void InitGame()
+void InitGame(int *framesCounter)
 {
-    framesCounter = 0;
-    allowMove = false;
+    *framesCounter = 0;
     InitSnake(&snake, (Vector2){0, 0});
-    PlaceFruit(&fruit, screenWidth, screenHeight);
+    PlaceFruit(&fruit);
 }
 
-void UpdateGame(bool *menuActive)
+void UpdateGame(bool *menuActive, int *framesCounter)
 {
+    static bool allowMove = true;
+
     // Salir del juego
     if (IsKeyPressed(KEY_X))
     {
@@ -102,7 +97,7 @@ void UpdateGame(bool *menuActive)
         }
 
         // Actualizar posición de la serpiente a la velocidad actual
-        if ((framesCounter % snake.speed) == 0)
+        if ((*framesCounter % snake.speed) == 0)
         {
             Vector2 temp = snake.body->position; // Almacenar la posición actual
             Vector2 last;                        // Variable temporal para almacenar la última posición
@@ -112,10 +107,10 @@ void UpdateGame(bool *menuActive)
             snake.body->position.y += snake.body->direction.y;
 
             // Verificar colisión con los bordes
-            if (snake.body->position.x >= screenWidth || snake.body->position.x < 0 || snake.body->position.y >= screenHeight || snake.body->position.y < 0)
+            if (snake.body->position.x >= SCREEN_WIDTH || snake.body->position.x < 0 || snake.body->position.y >= SCREEN_HEIGHT || snake.body->position.y < 0)
             {
                 *menuActive = true;
-                InitGame();
+                InitGame(framesCounter);
             }
 
             // Verificar colisión con el cuerpo
@@ -125,7 +120,7 @@ void UpdateGame(bool *menuActive)
                 if (CheckCollisionRecs((Rectangle){snake.body->position.x, snake.body->position.y, snake.size.x, snake.size.y}, (Rectangle){current->position.x, current->position.y, snake.size.x, snake.size.y}))
                 {
                     *menuActive = true;
-                    InitGame();
+                    InitGame(framesCounter);
                 }
                 current = current->sig;
             }
@@ -134,7 +129,7 @@ void UpdateGame(bool *menuActive)
             if (CheckCollisionRecs((Rectangle){snake.body->position.x, snake.body->position.y, snake.size.x, snake.size.y}, (Rectangle){fruit.position.x, fruit.position.y, snake.size.x, snake.size.y}))
             {
                 AddLength(&snake, 1);
-                PlaceFruit(&fruit, screenWidth, screenHeight);
+                PlaceFruit(&fruit);
             }
 
             // Mover el resto del cuerpo
@@ -151,7 +146,7 @@ void UpdateGame(bool *menuActive)
             allowMove = true;
         }
 
-        framesCounter++;
+        (*framesCounter)++;
     }
 }
 

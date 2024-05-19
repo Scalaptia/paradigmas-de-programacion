@@ -6,29 +6,29 @@ void InitMenu(Menu *menu, int maxOptions)
     menu->maxOptions = maxOptions;
 }
 
-void DrawMenu(Menu *menu, char *options[], int screenWidth, int screenHeight, Texture2D *texture)
+void DrawMenu(Menu *menu, char *options[], Texture2D *texture)
 {
     BeginDrawing();
     ClearBackground(BLACK);
     DrawTexture(*texture, 0, 0, WHITE);
 
-    DrawText("Snake", screenWidth / 2 - MeasureText("Snake", 54) / 2, screenHeight / 2 - 200, 54, WHITE);
+    DrawText("Snake", SCREEN_WIDTH / 2 - MeasureText("Snake", 54) / 2, SCREEN_HEIGHT / 2 - 200, 54, WHITE);
 
     for (int i = 0; i < menu->maxOptions; i++)
     {
         if (i == menu->option)
         {
-            DrawText(options[i], screenWidth / 2 - MeasureText(options[i], 30) / 2, screenHeight / 2 - 25 + 50 * i, 30, RED);
+            DrawText(options[i], SCREEN_WIDTH / 2 - MeasureText(options[i], 30) / 2, SCREEN_HEIGHT / 2 - 25 + 50 * i, 30, RED);
         }
         else
         {
-            DrawText(options[i], screenWidth / 2 - MeasureText(options[i], 30) / 2, screenHeight / 2 - 25 + 50 * i, 30, WHITE);
+            DrawText(options[i], SCREEN_WIDTH / 2 - MeasureText(options[i], 30) / 2, SCREEN_HEIGHT / 2 - 25 + 50 * i, 30, WHITE);
         }
     }
     EndDrawing();
 }
 
-void UpdateMenu(Menu *menu, char *options[], int screenWidth, int screenHeight, bool *menuActive)
+void UpdateMenu(Menu *menu, char *options[], bool *menuActive)
 {
     if (IsKeyPressed(KEY_S))
     {

@@ -9,5 +9,5 @@ typedef struct Menu
 } Menu;
 
 void InitMenu(Menu *menu, int maxOptions);
-void DrawMenu(Menu *menu, char *options[], int screenWidth, int screenHeight, Texture2D *texture);
-void UpdateMenu(Menu *menu, char *options[], int screenWidth, int screenHeight, bool *menuActive);
+void DrawMenu(Menu *menu, char *options[], Texture2D *texture);
+void UpdateMenu(Menu *menu, char *options[], bool *menuActive);
