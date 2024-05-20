@@ -179,5 +179,8 @@ void DrawGame()
         DrawRectangleV(fruit.position, snake.size, RED);
     }
 
+    // Pintar puntaje
+    DrawText(TextFormat("Puntaje: %i", snake.length - 1), 20, 20, 30, BLACK);
+
     EndDrawing();
 }
