@@ -1,6 +1,7 @@
 import banco
 import cuenta
 import os
+import cuenta_ahorro
 
 banco = banco.Banco()
 
@@ -8,20 +9,39 @@ def MenuAdmin():
     while True:
         os.system('clear')
         print("1.- Agregar cliente")
-        print("2.- Listar clientes")
-        print("3.- Salir")
+        print("2.- Agregar cliente de ahorro") 
+        print("3.- Listar clientes")
+        print("4.- Salir")
         opcion = input("Opcion: ")
         os.system('clear')
 
         if opcion == "1":
-            nombre = input("Nombre: ")
-            saldo = float(input("Saldo: "))
+            try:
+                nombre = input("Nombre: ")
+                saldo = float(input("Saldo: "))
+            except ValueError:
+                print("Saldo no valido")
+                input("Presione Enter para continuar...")
+                continue
+
             cliente = cuenta.Cuenta(nombre, saldo)
             banco.agregar_cliente(cliente)
         elif opcion == "2":
+            try:
+                nombre = input("Nombre: ")
+                saldo = float(input("Saldo: "))
+                tasa_interes = float(input("Tasa de interes: "))
+            except ValueError:
+                print("Saldo o tasa de interes no validos")
+                input("Presione Enter para continuar...")
+                continue
+
+            cliente = cuenta_ahorro.CuentaAhorro(nombre, saldo, tasa_interes)
+            banco.agregar_cliente(cliente)
+        elif opcion == "3":
             banco.listar_clientes()
             input("Presione Enter para continuar...")
-        elif opcion == "3":
+        elif opcion == "4":
             break
         else:
             print("Opcion no valida")
@@ -35,27 +55,49 @@ def MenuUsuario(usuario):
         print("2.- Retirar")
         print("3.- Transferir")
         print("4.- Mostrar saldo")
-        print("5.- Salir")
+        if isinstance(usuario, cuenta_ahorro.CuentaAhorro):
+            print("5.- Depositar interes")
+            print("6.- Salir")
+        else:
+            print("5.- Salir")
+
         opcion = input("Opcion: ")
         os.system('clear')
 
         if opcion == "1":
-            cantidad = float(input("Cantidad: "))
+            try:
+                cantidad = float(input("Cantidad: "))
+            except ValueError:
+                print("Cantidad no valida")
+                input("Presione Enter para continuar...")
+                continue
+
             usuario.depositar(cantidad)
             print("Deposito realizado")
             input("Presione Enter para continuar...")
         elif opcion == "2":
-            cantidad = float(input("Cantidad: "))
+            try:
+                cantidad = float(input("Cantidad: "))
+            except ValueError:
+                print("Cantidad no valida")
+                input("Presione Enter para continuar...")
+                continue
+
             usuario.retirar(cantidad)
             print("Retiro realizado")
             input("Presione Enter para continuar...")
         elif opcion == "3":
-            cuenta_destino = int(input("Cuenta destino: "))
-            cantidad = float(input("Cantidad: "))
+            try:
+                cuenta_destino = int(input("Cuenta destino: "))
+                cantidad = float(input("Cantidad: "))
+            except ValueError:
+                print("Cantidad o cuenta destino no validos")
+                input("Presione Enter para continuar...")
+                continue
+
             for cliente in banco.clientes:
                 if cliente.numero_cuenta == cuenta_destino:
                     usuario.transferir(cantidad, cliente)
-                    print("Transferencia realizada")
                     input("Presione Enter para continuar...")
                     break
             else:
@@ -64,26 +106,63 @@ def MenuUsuario(usuario):
         elif opcion == "4":
             print(f"Saldo: {usuario.mostrar_saldo()}")
             input("Presione Enter para continuar...")
-        elif opcion == "5":
+        elif opcion == "5" and not isinstance(usuario, cuenta_ahorro.CuentaAhorro):
+            break
+        elif opcion == "5" and isinstance(usuario, cuenta_ahorro.CuentaAhorro):
+            usuario.depositar_interes()
+            print("Interes depositado")
+            input("Presione Enter para continuar...")
+        elif opcion == "6" and isinstance(usuario, cuenta_ahorro.CuentaAhorro):
             break
         else:
             print("Opcion no valida")
             input("Presione Enter para continuar...")
         
 def RegistrarUsuario():
-    nombre = input("Nombre: ")
-    cliente = cuenta.Cuenta(nombre)
-    banco.agregar_cliente(cliente)
-    print(f"Usuario {cliente.propietario} registrado con el numero de cuenta {cliente.numero_cuenta}")
-    input("Presione Enter para continuar...")
+    try:
+        tipo_cuenta = int(input("Tipo de cuenta\n1- Normal\n2- Ahorro\nOpcion: "))
+        nombre = input("Nombre: ")
+    except ValueError:
+        print("Tipo de cuenta no valida")
+        input("Presione Enter para continuar...")
+        return
+    
+    if tipo_cuenta == 1:
+        cliente = banco.registrar_cliente(nombre)
+    elif tipo_cuenta == 2:
+        try:
+            tasa_interes = float(input("Tasa de interes: "))
+        except ValueError:
+            print("Tasa de interes no valida")
+            input("Presione Enter para continuar...")
+            return
+        
+        cliente = banco.registrar_cliente_ahorro(nombre, tasa_interes)
+    else:
+        print("Tipo de cuenta no valida")
+        input("Presione Enter para continuar...")
+        return
+
+    if cliente:
+        print(f"Usuario {cliente.propietario} registrado con el numero de cuenta {cliente.numero_cuenta}")
+        input("Presione Enter para continuar...")
+    else:
+        print("Error al registrar usuario")
+        input("Presione Enter para continuar...")
 
 def IniciarSesion():
-    nombre = input("Nombre: ")
-    for cliente in banco.clientes:
-        if cliente.propietario == nombre:
-            print("Sesion iniciada")
-            input("Presione Enter para continuar...")
-            return cliente
+    try:
+        num_cuenta = int(input("Numero de cuenta: "))
+    except ValueError:
+        print("Numero de cuenta no valido")
+        input("Presione Enter para continuar...")
+        return
+    
+    usuario = banco.iniciar_sesion(num_cuenta)
+
+    if usuario:
+        return usuario
+    
     print("Usuario no encontrado")
     input("Presione Enter para continuar...")
 

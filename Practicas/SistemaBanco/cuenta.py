@@ -1,7 +1,6 @@
-
-# Cuenta bancaria
 import random
 
+# Clase Cuenta
 class Cuenta:
     def __init__(self, propietario = "", saldo = 0):
         self.numero_cuenta = random.randint(10000, 99999)
@@ -27,6 +26,10 @@ class Cuenta:
         self.saldo -= cantidad
 
     def transferir(self, cantidad, cuenta_destino):
+        if cantidad <= 0:
+            print("Cantidad no valida")
+            return
+
         if self == cuenta_destino:
             print("No se puede transferir a la misma cuenta")
             return
@@ -37,6 +40,7 @@ class Cuenta:
         
         self.retirar(cantidad)
         cuenta_destino.depositar(cantidad)
+        print("Transferencia realizada")    
 
     def mostrar_saldo(self):
         return self.saldo
