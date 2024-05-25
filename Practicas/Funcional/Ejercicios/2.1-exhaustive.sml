@@ -1,0 +1,1 @@
+fun inexhaustive nil = nil
