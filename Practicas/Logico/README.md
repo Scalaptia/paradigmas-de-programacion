@@ -20,7 +20,7 @@
 -   [Objetos de datos](#objetos-de-datos)
     -   [Átomos](#átomos)
     -   [Números](#números)
-    -   [Variables anonimas](#variables-anonimas)
+    -   [Variables anonimas](#variables-anónimas)
 -   [Operadores](#operadores)
     -   [Operadores comparativos](#operadores-comparativos)
     -   [Operadores aritméticos](#operadores-aritméticos)
@@ -46,6 +46,26 @@
     -   [Estructuras](#estructuras)
     -   [Matching](#matching)
     -   [Arboles binarios](#arboles-binarios)
+-   [Backtracking](#backtracking)
+    -   [¿Como funciona?](#¿como-funciona?)
+    -   [Prevención de backtracking](#prevención-de-backtracking)
+    -   [Negación como falla](#negación-como-falla)
+-   [Different y not](#different-y-not)
+    -   [Ejemplo different](#ejemplo-different)
+    -   [Ejemplo not](#ejemplo-not)
+-   [Inputs y Outputs](#inputs-y-outputs)
+    -   [Write](#write)
+    -   [Read](#read)
+    -   [Tab](#tab)
+    -   [Escritura y lectura de archivos](#escritura-y-lectura-de-archivos)
+    -   [Manipulación de caracteres](#manipulación-de-caracteres)
+    -   [Consult](#consult)
+-   [Predicados integrados](#predicados-integrados)
+    -   [Predicados Comunes](#predicados-comunes)
+    -   [Predicados Matemáticos](#predicados-matemáticos)
+-   [Estructura de árbol](#estructura-de-árbol)
+    -   [Camino y localización](#camino-y-localización)
+    -   [Altura y valor máximo](#altura-y-valor-máximo)
 
 ## Instrucciones
 
@@ -65,7 +85,7 @@ En Prolog existen 3 elementos:
 
 ### Diferencias con la programación funcional
 
-![Diferencias entre programación funcional y lógica](image.png)
+![Diferencias entre programación funcional y lógica](Imágenes/image.png)
 
 En esta imagen se puede ver la diferencia entre la programación funcional y la lógica. En la programación funcional, se definen procedimientos y funciones que se ejecutan en un orden determinado. En la programación lógica, se define una base de conocimiento y se hacen consultas sobre ella para obtener respuestas a preguntas.
 
@@ -89,7 +109,7 @@ write('Hola, mundo!').
 
 La salida obtenida es la siguiente:
 
-> ![Salida](image-1.png)
+> ![Salida](Imágenes/image-1.png)
 
 Si deseamos crear un archivo con código Prolog en vez de escribirlo en la consola, podemos crear un archivo con extensión `.pl` y ejecutarlo con el comando `gprolog < archivo.pl`. Opcionalmente también podemos cambiar de directorio desde el intérprete de Prolog con el comando `change_directory('ruta').` y cargar el archivo con extension `.pl` con el comando `[nombre].`.
 
@@ -102,7 +122,7 @@ write('Este programa está escrito en el archivo hello_world.pl').
 
 Salida:
 
-> ![Salida hola_mundo.pl](image-2.png)
+> ![Salida hola_mundo.pl](Imágenes/image-2.png)
 
 ## Conceptos básicos
 
@@ -207,7 +227,7 @@ can_cook(priya).
 
 Salida:
 
-> ![Salida](image-3.png)
+> ![Salida](Imágenes/image-3.png)
 
 #### Ejemplo 2
 
@@ -223,7 +243,7 @@ playes_guitar(rohit) :- listens_to_music(rohit).
 
 Salida:
 
-> ![Salida](image-4.png)
+> ![Salida](Imágenes/image-4.png)
 
 ## Relaciones
 
@@ -247,7 +267,7 @@ Esta clausula nos dirá que piyus y raj son hermanos ya que ambos son hijos de s
 
 ### Relaciones familiares
 
-![Relaciones familiares](image-5.png)
+![Relaciones familiares](Imágenes/image-5.png)
 
 Con base a este diagrama de relaciones familiares podemos definir las siguientes relaciones:
 
@@ -289,7 +309,7 @@ sex( bob, masculine).
 
 Para definir una relación entre madre y hermana, podemos hacerlo de la siguiente manera:
 
-![Relacion madre hermana](image-6.png)
+![Relacion madre hermana](Imágenes/image-6.png)
 
 ```prolog
 mother(X,Y) :- parent(X,Y), female(X).
@@ -325,15 +345,15 @@ brother(X,Y):-parent(Z,X),parent(Z,Y),male(X),X\==Y.
 
 Salida:
 
-> ![Salida1](image-7.png)
+> ![Salida1](Imágenes/image-7.png)
 
-> ![Salida2](image-8.png)
+> ![Salida2](Imágenes/image-8.png)
 
 #### Ejemplo extendido
 
 Se pueden establecer relaciones más complejas, como la relación de abuelo. Para definir la relación de abuelo, se puede hacer de la siguiente manera:
 
-![Abuelo](image-9.png)
+![Abuelo](Imágenes/image-9.png)
 
 O incluso de esposa, tio, etc:
 
@@ -351,23 +371,23 @@ Ahora podemos hacer consultas sobre estas relaciones y trazar estas relaciones a
 
 Tíos:
 
-> ![alt text](image-10.png)
+> ![alt text](Imágenes/image-10.png)
 
 Abuelos:
 
-> ![alt text](image-11.png)
+> ![alt text](Imágenes/image-11.png)
 
 #### Trazar relaciones
 
 Para entrar en el modo de traza, se puede utilizar el comando `trace.`. Este comando activa el modo de traza y muestra cómo se resuelven las consultas paso a paso.
 
-> ![alt text](image-12.png)
+> ![alt text](Imágenes/image-12.png)
 
 ### Relaciones recursivas
 
 Las relaciones recursivas son relaciones que se definen en términos de sí mismas. Por ejemplo, la relación de ancestro se puede definir de la siguiente manera:
 
-![alt text](image-13.png)
+![alt text](Imágenes/image-13.png)
 
 ```prolog
 predecessor(X, Z) :- parent(X, Z).
@@ -378,7 +398,7 @@ predecessor(X, Z) :- parent(X, Y),predecessor(Y, Z).
 
 Los objetos de datos se pueden dividir en varias categorías:
 
-![alt text](image-14.png)
+![alt text](Imágenes/image-14.png)
 
 Ejemplos de objetos de datos son:
 
@@ -399,7 +419,7 @@ Otra variación de las constantes son los números. Los números en Prolog puede
 
 Prolog también soporta números reales, pero su uso en Prolog es limitado, ya que es un lenguaje principalmente simbólico y no para cálculos numéricos. Dependiendo de la implementación de Prolog, puede variar el rango de los números reales.
 
-#### Variables anonimas
+#### Variables anónimas
 
 Las variables anónimas son variables que se utilizan solo una vez. Se representan con un guion bajo ( _ ). Por ejemplo, `parent(X, _)` significa que no nos importa quién es el hijo.
 
@@ -420,17 +440,17 @@ Si queremos saber quién odia a tom, podemos hacer la siguiente consulta:
 
 La salida será:
 
-> ![anónimas](image-15.png)
+> ![anónimas](Imágenes/image-15.png)
 
 ## Operadores
 
 ### Operadores comparativos
 
-![comparativos](image-16.png)
+![comparativos](Imágenes/image-16.png)
 
 ### Operadores aritméticos
 
-![aritméticos](image-17.png)
+![aritméticos](Imágenes/image-17.png)
 
 #### Ejemplo
 
@@ -446,7 +466,7 @@ calc :- X is 100 + 200,write('100 + 200 is '),write(X),nl,
 
 Salida:
 
-> ![alt text](image-18.png)
+> ![alt text](Imágenes/image-18.png)
 
 ## Ciclos y toma de decisiones
 
@@ -466,7 +486,7 @@ count_to_10(X) :-
 
 Salida:
 
-> ![alt text](image-19.png)
+> ![alt text](Imágenes/image-19.png)
 
 #### Ejemplo 2
 
@@ -484,9 +504,9 @@ count_up(L, H) :-
 
 Salida:
 
-> ![count_down](image-20.png)
+> ![count_down](Imágenes/image-20.png)
 
-> ![count_up](image-21.png)
+> ![count_up](Imágenes/image-21.png)
 
 ### Toma de decisiones
 
@@ -509,7 +529,7 @@ gte(X,Y) :- X < Y,write('X is smaller').
 
 Salida:
 
-> ![if else](image-22.png)
+> ![if else](Imágenes/image-22.png)
 
 ## Conjunciones y disyunciones
 
@@ -542,7 +562,7 @@ child_of(X,Y) :- father(X,Y);mother(X,Y).
 
 Salida:
 
-> ![conj_dis](image-23.png)
+> ![conj_dis](Imágenes/image-23.png)
 
 ## Listas
 
@@ -558,7 +578,7 @@ Ahora, consideremos que tenemos una lista, `L = [a, b, c].` Si escribimos `Tail 
 
 ### Operaciones con listas
 
-![operaciones](image-24.png)
+![operaciones](Imágenes/image-24.png)
 
 ### Operación de membresía
 
@@ -573,7 +593,7 @@ list_member(X,[_|TAIL]) :- list_member(X,TAIL).
 
 Salida:
 
-> ![alt text](image-25.png)
+> ![alt text](Imágenes/image-25.png)
 
 #### Calculo de longitud
 
@@ -619,11 +639,11 @@ list_insert(X,L,R) :- list_delete(X,R,L).
 
 ### Operaciones de reposicionamiento
 
-![alt text](image-26.png)
+![alt text](Imágenes/image-26.png)
 
 ### Operaciones misceláneas
 
-![alt text](image-27.png)
+![alt text](Imágenes/image-27.png)
 
 ## Recursividad y estructuras
 
@@ -640,7 +660,7 @@ is_digesting(X,Y) :-just_ate(X,Z),is_digesting(Z,Y).
 
 #### Ejemplo 2
 
-> ![recursividad](image-28.png)
+> ![recursividad](Imágenes/image-28.png)
 
 ```prolog
 predecessor(X, Z) :- parent(X, Z).
@@ -651,7 +671,7 @@ predecessor(X, Z) :- parent(X, Y),predecessor(Y, Z).
 
 Las estructuras y los objetos de datos son similares en Prolog. Las estructuras se utilizan para representar datos complejos. Las estructuras se definen con un nombre y una lista de argumentos. Ambos pueden tener múltiples componentes, y una estructura incluso puede contener otra estructura.
 
-![estructuras](image-29.png)
+![estructuras](Imágenes/image-29.png)
 
 ### Matching
 
@@ -659,7 +679,7 @@ El matching se utiliza para verificar si dos términos son iguales o no. En Prol
 
 ### Arboles binarios
 
-![árbol binario](image-30.png)
+![árbol binario](Imágenes/image-30.png)
 
 Los arboles binarios se pueden representar en Prolog de la siguiente manera utilizando estructuras recursivas:
 
@@ -673,13 +693,13 @@ En esta definición, cada nodo tiene 3 campos: el dato y dos nodos.
 
 El backtracking es un proceso en el se busca el valor de verdad de diferentes predicados al verificar si son correctos o no. El término backtracking es bastante común en el diseño de algoritmos y en diferentes entornos de programación. En Prolog, hasta que alcanza el destino adecuado, intenta retroceder. Cuando se encuentra el destino, se detiene.
 
-![backtracking](image-31.png)
+![backtracking](Imágenes/image-31.png)
 
 ### ¿Como funciona?
 
 #### Base de conocimientos
 
-![conocimientos](image-32.png)
+![conocimientos](Imágenes/image-32.png)
 
 ```prolog
 boy(tom).
@@ -692,7 +712,7 @@ pay(X,Y) :- boy(X), girl(Y).
 
 Salida:
 
-> ![backtracking](image-33.png)
+> ![backtracking](Imágenes/image-33.png)
 
 ### Prevención de backtracking
 
@@ -722,11 +742,11 @@ En el primer caso, si X es 2, entonces se probará la regla 1, luego la regla 2 
 
 Salida con backtracking:
 
-> ![backtrack](image-34.png)
+> ![backtrack](Imágenes/image-34.png)
 
 Salida sin backtracking:
 
-> ![no backtrack](image-35.png)
+> ![no backtrack](Imágenes/image-35.png)
 
 ### Negación como falla
 
@@ -747,7 +767,7 @@ likes(mary, X) :- animal(X).
 
 Salida:
 
-> ![negación](image-36.png)
+> ![negación](Imágenes/image-36.png)
 
 ## Different y not
 
@@ -762,7 +782,7 @@ different(X, Y).
 
 Salida:
 
-> ![dif](image-37.png)
+> ![dif](Imágenes/image-37.png)
 
 ### Ejemplo not
 
@@ -772,7 +792,7 @@ not(P) :- P, !, fail ; true.
 
 Salida:
 
-> ![not](image-38.png)
+> ![not](Imágenes/image-38.png)
 
 ## Inputs y Outputs
 
@@ -780,7 +800,7 @@ Salida:
 
 El predicado `write` se utiliza para imprimir un mensaje en la consola.
 
-![alt text](image-39.png)
+> ![alt text](Imágenes/image-39.png)
 
 ### Read
 
@@ -799,4 +819,151 @@ process(Number) :-
 
 Salida:
 
-![read](image-40.png)
+> ![read](Imágenes/image-40.png)
+
+### Tab
+
+El predicado `tab` se utiliza para insertar un número de espacios en la consola.
+
+> ![tab](Imágenes/image-41.png)
+
+### Escritura y lectura de archivos
+
+Para escribir en un archivo, se puede utilizar el predicado `tell` y `told`. `tell` toma el nombre del archivo como argumento y `told` se utiliza para cerrar el archivo.
+
+> ![tell y told](Imágenes/image-42.png)
+
+Para leer un archivo, se puede utilizar el predicado `see` y `seen`. `see` toma el nombre del archivo como argumento y `seen` se utiliza para cerrar el archivo.
+
+Para procesar este archivo, escribimos este código:
+
+```prolog
+process_file :-
+   read(Line),
+   Line \== end_of_file, % when Line is not not end of file, call process.
+   process(Line).
+process_file :- !. % use cut to stop backtracking
+
+process(Line):- %this will print the line into the console
+   write(Line),nl,
+   process_file.
+```
+
+Salida:
+
+> ![process file](Imágenes/image-43.png)
+
+### Manipulación de caracteres
+
+Para poder escribir y leer caracteres, se pueden utilizar los predicados `put` y `get`.
+
+#### put(C) y put_char(C)
+
+> ![put](Imágenes/image-44.png)
+
+#### get_char(C) y get_code(C)
+
+> ![get](Imágenes/image-45.png)
+
+#### Construcción de átomos
+
+> ![átomos](Imágenes/image-46.png)
+
+#### Descomposición de átomos
+
+> ![átomos descompuestos](Imágenes/image-47.png)
+
+### Consult
+
+Las técnica de consult se utiliza para combinar predicados de diferentes archivos. Para hacerlo, se puede utilizar el predicado `consult`. Suponga que queremos combinar los predicados de dos archivos, `prog_1.pl` y `prog_2.pl`. Podemos hacerlo de la siguiente manera:
+
+> ![prog_1](Imágenes/image-48.png)
+
+> ![prog_2](Imágenes/image-49.png)
+
+## Predicados integrados
+
+### Predicados Comunes
+
+> ![predicados](Imágenes/image-50.png)
+
+### Predicados Matemáticos
+
+> ![math](Imágenes/image-51.png)
+
+## Estructura de árbol
+
+> ![árbol](Imágenes/image-52.png)
+
+Para implementar esta estructura de árbol, se puede utilizar el siguiente código:
+
+```prolog
+/* The tree database */
+
+:- op(500,xfx,'is_parent').
+
+a is_parent b. c is_parent g. f is_parent l. j is_parent q.
+a is_parent c. c is_parent h. f is_parent m. j is_parent r.
+a is_parent d. c is_parent i. h is_parent n. j is_parent s.
+b is_parent e. d is_parent j. i is_parent o. m is_parent t.
+b is_parent f. e is_parent k. i is_parent p. n is_parent u.
+n
+is_parent v.
+/* X and Y are siblings i.e. child from the same parent */
+
+:- op(500,xfx,'is_sibling_of').
+
+X is_sibling_of Y :- Z is_parent X,
+                     Z is_parent Y,
+                     X \== Y.
+leaf_node(Node) :- \+ is_parent(Node,Child). % Node grounded
+
+/* X and Y are on the same level in the tree. */
+
+:-op(500,xfx,'is_at_same_level').
+X is_at_same_level X .
+X is_at_same_level Y :- W is_parent X,
+                        Z is_parent Y,
+                        W is_at_same_level Z.
+```
+
+Salida:
+
+> ![salida árbol](Imágenes/image-53.png)
+
+### Camino y localización
+
+Añadimos una función para la ruta de un nodo a otro y para localizar un nodo en el árbol:
+
+```prolog
+path(a).                             /* Can start at a. */
+path(Node) :- Mother is_parent Node, /* Choose parent, */
+              path(Mother),          /* find path and then */
+              write(Mother),
+              write(' --> ').
+
+/* Locate node by finding a path from root down to the node */
+locate(Node) :- path(Node),
+                write(Node),
+                nl.
+```
+
+> ![path locate](Imágenes/image-54.png)
+
+### Altura y valor máximo
+
+Ahora, añadimos funciones para encontrar la altura de un nodo, el elemento máximo, y la altura del árbol:
+
+```prolog
+height(N,H) :- setof(Z,ht(N,Z),Set),
+               max(Set,0,H).
+
+ht(Node,0) :- leaf_node(Node),!.
+ht(Node,H) :- Node is_parent Child,
+              ht(Child,H1),
+              H is H1 + 1.
+max([],M,M).
+max([X|R],M,A) :- (X > M -> max(R,X,A) ; max(R,M,A)).
+```
+
+> ![height](Imágenes/image-55.png)

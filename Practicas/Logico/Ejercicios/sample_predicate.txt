@@ -1,0 +1,4 @@
+likes(lili, cat).
+likes(jhon,dog).
+domestic(dog).
+domestic(cat).

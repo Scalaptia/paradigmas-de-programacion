@@ -21,7 +21,7 @@ int main(void)
 
     // Inicializar juego
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Snake");
-    Image fondo = LoadImage("Practicas/Snake/resources/fondo.png");
+    Image fondo = LoadImage("/home/haro/Documents/GitHub/paradigmas-de-programacion/Practicas/Snake/resources/fondo.png");
     Texture2D texture = LoadTextureFromImage(fondo);
     UnloadImage(fondo);
 
